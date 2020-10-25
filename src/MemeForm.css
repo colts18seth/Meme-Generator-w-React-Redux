@@ -1,0 +1,15 @@
+.MemeForm img {
+	max-width: 200px;
+	max-height: 200px;
+}
+
+.form-control {
+	text-align: center;
+	margin: 0 auto;
+	width: 50%;
+}
+
+canvas {
+	max-width: 300px;
+	max-height: 300px;
+}
