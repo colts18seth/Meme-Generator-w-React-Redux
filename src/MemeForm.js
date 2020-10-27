@@ -18,8 +18,16 @@ function MemeForm() {
 
         dispatch({ type: "ADD-IMAGE", name: e.target.alt, image: e.target.src });
     }
+    const addTopText = (e) => {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.font = '48px serif';
+        ctx.fillText('Hello world', 10, 50);
+        const topTextInput = document.getElementById("topText")
+        let topText = topTextInput.value;
+    }
 
-    console.log(memes);
+    console.log(memes)
 
     return (
         <div className="MemeForm">
