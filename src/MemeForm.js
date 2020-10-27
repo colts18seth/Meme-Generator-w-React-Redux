@@ -2,18 +2,21 @@ import meme1 from "./imgs/meme1.jpg";
 import meme2 from "./imgs/meme2.jpg";
 import meme3 from "./imgs/meme3.jpg";
 import meme4 from "./imgs/meme4.jpg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import './MemeForm.css';
 
 function MemeForm() {
-    const memes = useSelector(s => s.memes);
-    // const dispatch = useDispatch();
+    const memes = useSelector(state => state.memes);
+    const dispatch = useDispatch();
 
     const addImage = (e) => {
-        const svgDiv = document.getElementById("display");
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 500;
+        canvas.height = 500;
+        ctx.drawImage(e.target, 0, 0, 500, 500);
 
-
-        // dispatch({ type: "ADD-IMAGE", name: e.target.alt, image: e.target.src });
+        dispatch({ type: "ADD-IMAGE", name: e.target.alt, image: e.target.src });
     }
 
     console.log(memes);
@@ -58,11 +61,8 @@ function MemeForm() {
             </form>
             <hr />
             <div id="display">
-                <svg width="500" height="500">
-                    <image width="500px"
-                        height="500px"
-                        href={meme1} />
-                </svg>
+                <canvas id="canvas">
+                </canvas>
             </div>
         </div>
     );
