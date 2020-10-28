@@ -4,6 +4,7 @@ import meme3 from "./imgs/meme3.jpg";
 import meme4 from "./imgs/meme4.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import './MemeForm.css';
+import FinishedMeme from "./FinishedMeme";
 
 function MemeForm() {
     const memes = useSelector(state => state.finishedMemes);
@@ -16,7 +17,7 @@ function MemeForm() {
         canvas.height = 500;
         ctx.drawImage(e.target, 0, 0, 500, 500);
 
-        dispatch({ type: "ADD-IMAGE", image: e.target.src });
+        dispatch({ type: "ADD-IMAGE", image: e.target.src, name: e.target.alt });
     }
 
     const addTopText = () => {
@@ -43,10 +44,20 @@ function MemeForm() {
 
     const saveMeme = (e) => {
         e.preventDefault();
-        const canvas = document.getElementById('canvas');
-        const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-        dispatch({ type: "SAVE-MEME", payload: image });
+        dispatch({ type: "SAVE-MEME" });
         console.log(memes)
+    }
+
+    const drawFinishedMemes = (meme) => {
+        const finishedMemes = document.getElementById("finishedMemes");
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext('2d');
+        let topText = meme.topText;
+        let bottomText = meme.bottomText;
+        ctx.font = '40px arial';
+        ctx.fillText(topText, 10, 50);
+        ctx.fillText(bottomText, 10, 490);
+        finishedMemes.append(canvas);
     }
 
     return (
@@ -94,11 +105,7 @@ function MemeForm() {
             </div>
             <div id="finishedMemes">
                 {memes &&
-                    memes.map(meme => {
-                        return (<div key={meme}>
-                            <img src={meme} alt="meme" />
-                        </div>)
-                    })
+                    memes.map(meme => <FinishedMeme drawFinishedMemes={drawFinishedMemes} meme={meme} />)
                 }
             </div>
         </div>

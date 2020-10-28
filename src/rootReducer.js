@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
     memeBeingMade: {
+        name: null,
         image: null,
         topText: null,
         bottomText: null
@@ -11,6 +12,7 @@ function rootReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case "ADD-IMAGE":
             console.log("image added");
+            state.memeBeingMade.name = action.name;
             state.memeBeingMade.image = action.image;
             return { ...state };
         case "ADD-TOP-TEXT":
@@ -23,7 +25,7 @@ function rootReducer(state = INITIAL_STATE, action) {
             return { ...state };
         case "SAVE-MEME":
             console.log("saved");
-            state.finishedMemes.push(action.payload);
+            state.finishedMemes.push({ name: state.memeBeingMade.name, image: state.memeBeingMade.image, topText: state.memeBeingMade.topText, bottomText: state.memeBeingMade.bottomText });
             return { ...state };
         default:
             return state;
