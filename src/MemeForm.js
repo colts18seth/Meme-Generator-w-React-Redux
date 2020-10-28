@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import './MemeForm.css';
 
 function MemeForm() {
-    const memes = useSelector(state => state.memes);
+    const memes = useSelector(state => state.finishedMemes);
     const dispatch = useDispatch();
 
     const addImage = (e) => {
@@ -16,18 +16,38 @@ function MemeForm() {
         canvas.height = 500;
         ctx.drawImage(e.target, 0, 0, 500, 500);
 
-        dispatch({ type: "ADD-IMAGE", name: e.target.alt, image: e.target.src });
-    }
-    const addTopText = (e) => {
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.font = '48px serif';
-        ctx.fillText('Hello world', 10, 50);
-        const topTextInput = document.getElementById("topText")
-        let topText = topTextInput.value;
+        dispatch({ type: "ADD-IMAGE", image: e.target.src });
     }
 
-    console.log(memes)
+    const addTopText = () => {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const topTextInput = document.getElementById("topText")
+        let topText = topTextInput.value;
+        ctx.font = '40px arial';
+        ctx.fillText(topText, 10, 50);
+
+        dispatch({ type: "ADD-TOP-TEXT", topText: topText });
+    }
+
+    const addBottomText = () => {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const bottomTextInput = document.getElementById("bottomText")
+        let bottomText = bottomTextInput.value;
+        ctx.font = '40px arial';
+        ctx.fillText(bottomText, 10, 490);
+
+        dispatch({ type: "ADD-BOTTOM-TEXT", bottomText: bottomText });
+    }
+
+    const saveMeme = (e) => {
+        e.preventDefault();
+        const canvas = document.getElementById('canvas');
+        const image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        dispatch({ type: "SAVE-MEME", payload: image });
+        console.log(memes)
+    }
 
     return (
         <div className="MemeForm">
@@ -55,15 +75,15 @@ function MemeForm() {
                     <label htmlFor="topText">
                         Top Text:
                     </label>
-                    <input className="form-control" id="topText" />
+                    <input onChange={addTopText} className="form-control" id="topText" />
                 </div>
                 <div className="form-group">
                     <label htmlFor="bottomText">
                         Bottom Text:
                     </label>
-                    <input className="form-control" id="bottomText" />
+                    <input onChange={addBottomText} className="form-control" id="bottomText" />
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button onClick={saveMeme} type="submit" className="btn btn-primary">
                     Save
                 </button>
             </form>
@@ -71,6 +91,15 @@ function MemeForm() {
             <div id="display">
                 <canvas id="canvas">
                 </canvas>
+            </div>
+            <div id="finishedMemes">
+                {memes &&
+                    memes.map(meme => {
+                        return (<div key={meme}>
+                            <img src={meme} alt="meme" />
+                        </div>)
+                    })
+                }
             </div>
         </div>
     );
