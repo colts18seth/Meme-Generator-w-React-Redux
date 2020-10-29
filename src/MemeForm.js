@@ -51,7 +51,7 @@ function MemeForm() {
 
     return (
         <div className="row">
-            <div className="col">
+            <div id="displayCol" className="col">
                 <div id="display"></div>
             </div>
             <div className="MemeForm col">
